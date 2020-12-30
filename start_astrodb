@@ -1,0 +1,70 @@
+
+
+create table users (user_id serial primary key, username text unique not null, password text, role text, email text, member text, guests integer);
+
+create table guests (user_id integer primary key, sponsor_id integer, exp_date timestamp, foreign key (user_id) references users (user_id) on delete cascade);
+
+create table admins (user_id integer primary key, pin1_2 text, pin1_3 text, pin1_4 text, pin2_3 text, pin2_4 text, pin3_4 text, foreign key (user_id) references users (user_id) on delete cascade);
+
+create table serversettings (server_id text primary key, emailuser text, emailpassword text, emailserver text, no_reply text, starttls integer, sessions integer);
+
+create table variabletext (variable_name text primary key, variable_text text);
+
+create table messages (mess_id serial primary key, message text, time timestamp, username text);
+
+create function delete_oldest_message() returns trigger as
+$BODY$
+begin
+delete from messages where mess_id <= (select mess_id from messages order by mess_id desc limit 1 offset 10);
+return new;
+end;
+$BODY$
+language plpgsql volatile;
+
+create trigger n_messages_only after insert on messages
+    execute procedure delete_oldest_message();
+
+create table slots (starttime timestamp primary key, status integer, user_id integer);
+
+
+create function delete_nth_slot() returns trigger as
+$BODY$
+begin
+delete from slots where starttime <= (select starttime from slots order by starttime desc limit 1 offset 100);
+return new;
+end;
+$BODY$
+language plpgsql volatile;
+
+create trigger n_slots_only after insert on slots
+    execute procedure delete_nth_slot();
+
+
+insert into users values (default, 'admin', 'c7cf796b092f254292993dbeea67d8a134990118226962ad3b33eaafda572f0b406a7b3b2f9a0f60440e25e8083aac3923b16501844734329bf8cfb01750e2aa', 'ADMIN', null, null, 0);
+
+
+insert into admins (user_id, pin1_2, pin1_3, pin1_4, pin2_3, pin2_4, pin3_4) values (1,
+'5497d85bfdbb3350a8a331abe5372b1164e7581e2330fcccc204ce90581c68c23a04367b8cc9b426e9ad5e562e132d3396a6b8e183feb63ba6f74fccd1d52add',
+'05b418edddc6285bc0def66acfd897e565bda3e3b91c0fe9e194cf96f527dd1a50893c0d1aa152eeeab4c4dd3c8caadd430e714585ed824162d9104c24b58865',
+'7a6ad147e4ef8e538af9e0a74e0367843d8aca7a24635e86dda1d133907c7551d3ed3e8aba7a78f759122f37827ffd5bdf0353b6879dfa390a2c8e6870328692',
+'24740437b98022f6b210267032c9a6938f224626412b8f1096d843480ed99196503658aa1483870ea420b5fcbf351e1548fcdd369cbbb98bdcd2512644bda1a3',
+'5ffb241a31aaa8c42c156c724abc6d4d12978857fc710ff908f69ccb04d3fd7dc208f3bcc97d789b897ced40cac4b61e5fcb20efc2b86ae1b7afcf5a06dc44cc',
+'8522bc614a325788d40d004490c86146fafd843bd7f8ced5ff151a3613ef6312c80d61613baf23b81370d993b15640a85078c16d7efc02a6925fafb1164a4c04'
+);
+
+insert into serversettings (server_id,  emailuser, emailpassword, emailserver, no_reply, starttls, sessions) values (
+'1', Null, Null, 'smtp.googlemail.com', 'no_reply@skipole.co.uk', 1, 1);
+
+insert into variabletext (variable_name, variable_text) values ('org_name', 'The Astronomy Centre');
+
+insert into variabletext (variable_name, variable_text) values ('header_text', 'Astronomy Centre : REMSCOPE');
+
+insert into variabletext (variable_name, variable_text) values ('home_text', 'The Astronomy Centre robotic telescope.');
+
+
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public to astro;
+
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public to astro;
+
+GRANT ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA public to astro;
+
