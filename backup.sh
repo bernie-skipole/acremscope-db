@@ -11,8 +11,8 @@
 
 keypassphrase="set passphrase here"
 
-file="/home/astro/backups/backup.sql.gz.cpt"
-oldfile="/home/astro/backups/backup_old.sql.gz.cpt"
+file="/home/bernard/backups/backup.sql.gz.cpt"
+oldfile="/home/bernard/backups/backup_old.sql.gz.cpt"
 
 
 if [ -e $file ];
@@ -34,8 +34,8 @@ pg_dump -o astrodb | gzip | ccrypt -e -E keypassphrase > "$file"
 # followed by gzip -d
 #
 # or use a similar shell file to this, setting the passphrase
-# into environment ketpassphrase, followed by:
+# into environment keypassphrase, followed by:
 
-# cat "$file" | ccrypt -d -E keypassphrase | gzip -d > "/home/astro/backups/backup.sql"
+# cat "$file" | ccrypt -d -E keypassphrase | gzip -d > "/home/bernard/backups/backup.sql"
 
 

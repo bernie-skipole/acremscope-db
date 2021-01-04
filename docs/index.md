@@ -112,6 +112,10 @@ createuser -P -W astro
 
 This asks for the database password, for initial development use 'xxSgham',
 
+P option: createuser will issue a prompt for the password of the new user.
+
+W option: Force createuser to prompt for a password
+
 Then create a database 'astrodb' owned by user astro:
 
 createdb -O astro astrodb
@@ -135,5 +139,37 @@ and check you can access the database with:
 select * from users;
 
 and quit with \q
+
+## automate backups
+
+As bernard on the container, create directory backups, with permissions 777 so
+a postgres backup routine can write files into it
+
+mkdir backups
+
+chmod 777 backups
+
+As root on the container
+
+apt-get install ccrypt
+
+and put backup.sh into /opt/dbmaintenance
+
+cp /home/bernard/acremscope-db/backup.sh /opt/dbmaintenance
+
+cd /opt/dbmaintenance
+
+chown postgres:postgres backup.sh
+
+chmod 600 backup.sh
+
+And set the following using
+
+crontab -u postgres -e
+
+0 12,13 * * * python3 /opt/dbmaintenance/clearguests.py >/dev/null 2>&1
+
+30 13 * * 6 /bin/bash /opt/dbmaintenance/backup.sh >/dev/null 2>&1
+
 
 
