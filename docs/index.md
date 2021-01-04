@@ -163,13 +163,18 @@ chown postgres:postgres backup.sh
 
 chmod 600 backup.sh
 
+edit the key passphrase in backup.sh to one of your choice
+
 And set the following using
 
 crontab -u postgres -e
 
-0 12,13 * * * python3 /opt/dbmaintenance/clearguests.py >/dev/null 2>&1
-
 30 13 * * 6 /bin/bash /opt/dbmaintenance/backup.sh >/dev/null 2>&1
+
+
+## automate clearing guest accounts
+
+0 12,13 * * * python3 /opt/dbmaintenance/clearguests.py >/dev/null 2>&1
 
 
 
