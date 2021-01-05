@@ -145,9 +145,9 @@ and quit with \q
 As bernard on the container, create directory backups, with permissions 777 so
 a postgres backup routine can write files into it
 
-mkdir backups
+mkdir ~/backups
 
-chmod 777 backups
+chmod 777 ~/backups
 
 As root on the container
 
