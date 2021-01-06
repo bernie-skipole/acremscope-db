@@ -142,12 +142,9 @@ and quit with \q
 
 ## automate backups
 
-As bernard on the container, create directory backups, with permissions 777 so
-a postgres backup routine can write files into it
+As bernard on the container, create directory backups
 
 mkdir ~/backups
-
-chmod 777 ~/backups
 
 As root on the container
 

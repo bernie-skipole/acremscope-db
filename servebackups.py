@@ -20,7 +20,7 @@ PROJ_DATA={"rconn":rconn,                                 # redis connection
            "projurl":"/acremscope/backups",               # where this project is served
            "urlfolder":"/acremscope/backups/files",       # the url of the folder called when requesting a backup file
            "username":"sysadmin",                         # the username which must be used to log in
-           "password": "c46b129abef0d47bfde9ad0e4d4e706a0315572a610012e51b8359a08937231bcf10deeba432fc5abd4281011f5c738ad2c05fdad598ed36c04766d392cfe18c"
+           "password": "2408af085311a5e19308f33260943d16bbc16e801c0f3006106eef01789d9e995b4d39b2709496711792f7f5e605322f099e80d278470e78a2d9c9d3048c3e48"
            }
 
 # The password above is an hashed password, being the result of running
@@ -40,9 +40,9 @@ def _is_user_logged_in(skicall):
     return True
 
 
-def _hash_password(password):
+def _hash_password(username, password):
     "Return hashed password, as a string, on failure return None"
-    seed_password = "1234554321" +  password
+    seed_password = username +  password
     hashed_password = hashlib.sha512(   seed_password.encode('utf-8')  ).hexdigest()
     return hashed_password
 
@@ -91,10 +91,11 @@ def submit_data(skicall):
     if skicall.ident_list[-1] == (PROJECT, 10):
         # this call is to checklogin from the login page
         skicall.call_data['authenticate'] = False
-        if (("login", "input_text1") in skicall.call_data) and (skicall.call_data["login", "input_text1"] == skicall.proj_data["username"]):
+        username = skicall.proj_data["username"]
+        if (("login", "input_text1") in skicall.call_data) and (skicall.call_data["login", "input_text1"] == username):
             if ("login", "input_text2") in skicall.call_data:
                 password = skicall.call_data["login", "input_text2"]
-                hashed = _hash_password(password)
+                hashed = _hash_password(username, password)
                 if hashed == skicall.proj_data["password"]:
                     skicall.call_data['authenticate'] = True
         if skicall.call_data['authenticate']:
