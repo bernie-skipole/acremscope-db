@@ -200,6 +200,12 @@ cp ~/acremscope-db/servebackups.py ~/www
 
 cp -r ~/acremscope-db/servebackups ~/www
 
+A hashed password needs to be set into servebackups.py, to do so, decide on a username and password and use the script
+
+python3 ~/acremscope-db/hashpassword.py
+
+Which will ask for a username and password and then output a long string of the hashed password. Copy that string and paste it, together with the username into the head of the file ~/www/servebackups.py
+
 and install redis client, skipole and waitress
 
 python3 -m pip install --user skipole
