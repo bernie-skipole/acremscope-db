@@ -173,45 +173,41 @@ application = WSGIApplication(project=PROJECT,
 skis_application = skis.makeapp()
 application.add_project(skis_application, url=PROJ_DATA["projurl"] + '/lib')
 
-# The add_project method of application, enables the added sub application
-# to be served at a URL which should extend the URL of the main 'root' application.
-# The above shows the main application served at "/" and the skis library
-# project served at "/lib"
-
-
-#############################################################################
-#
-# You should remove everything below here when deploying and serving your
-# finished application. The following lines are used to serve the project
-# locally and add the skiadmin project for development.
-
-# Normally, when deploying on a web server, you would follow the servers
-# own documentation which should describe how to load a wsgi application.
-# for example, using gunicorn3 by command line
-
-# gunicorn3 -w 4 servebackups:application
-
-# Where gunicorn3 is the python3 version of gunicorn
-
 
 if __name__ == "__main__":
 
+    # If called as a script, this portion runs the python waitress server
+    # and serves the project.
 
-    ############### THESE LINES ADD THE SKIADMIN SUB-PROJECT FOR DEVELOPMENT #
-    ################# AND SHOULD BE REMOVED WHEN YOU DEPLOY YOUR APPLICATION #
+    ###############################################################################
+    #
+    # you could add the 'skiadmin' sub project
+    # which can be used to develop pages for your project
+    #
+    ############################### THESE LINES ADD SKIADMIN ######################
+    #                                                                             #
+    #set_debug(True)                                                               #
+    #from skipole import skiadmin                                                  #
+    #skiadmin_application = skiadmin.makeapp(editedprojname=PROJECT)               #
+    #application.add_project(skiadmin_application, url='/test/skiadmin')           #
+    #                                                                             #
+    ###############################################################################
 
+    # if using the waitress server
+    from waitress import serve
 
-    from skipole import skiadmin, set_debug, skilift
-    set_debug(True)
-    skiadmin_application = skiadmin.makeapp(editedprojname=PROJECT)
-    application.add_project(skiadmin_application, url=PROJ_DATA["projurl"] + '/skiadmin')
+    # or the skilift development server
+    # from skipole import skilift
 
-    # serve the application with the development server from skilift
+    # serve the application, note host 0.0.0.0 rather than
+    # 127.0.0.1 - so this will be available externally
 
-    host = "127.0.0.1"
+    host = "0.0.0.0"
     port = 8000
-    print("Serving %s on port %s" % (PROJECT, port))
-    skilift.development_server(host, port, application)
- 
 
+    # using waitress
+    serve(application, host=host, port=port)
 
+    # or skilift
+    # print("Serving %s on port %s" % (PROJECT, port))
+    # skilift.development_server(host, port, application)
