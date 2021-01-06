@@ -31,6 +31,9 @@
 # ensures ownership is bernard:bernard
 #
 # deletes file /opt/dbmaintenance/backup.sql.gz.cpt
+#
+# if more than 5 backup files in /home/bernard/backups/, delete the oldest
+#
 # exits
 
 import sys, pathlib, shutil, datetime
@@ -58,6 +61,14 @@ shutil.copy(sourcefile, destinationfile)
 shutil.chown(destinationfile, user=newowner, group=newowner)
 
 sourcefile.unlink()
+
+serverfiles = [f.name for f in destination.iterdir() if f.is_file()]
+if len(serverfiles) <= 5:
+    sys.exit(0)
+# delete the last one
+serverfiles.sort(reverse=True)
+oldest_file = destination / serverfiles[-1]
+oldest_file.unlink()
 
 sys.exit(0)
 
