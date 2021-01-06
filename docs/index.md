@@ -150,9 +150,11 @@ As root on the container
 
 apt-get install ccrypt
 
-and put backup.sh into /opt/dbmaintenance
+and put backup.sh and copybackups.py into /opt/dbmaintenance
 
 cp /home/bernard/acremscope-db/backup.sh /opt/dbmaintenance
+
+cp /home/bernard/acremscope-db/copybackups.py /opt/dbmaintenance
 
 cd /opt/dbmaintenance
 
@@ -167,6 +169,63 @@ And set the following using
 crontab -u postgres -e
 
 30 13 * * 6 /bin/bash /opt/dbmaintenance/backup.sh >/dev/null 2>&1
+
+This will dump a backup at 1:30 afternoon every saturday into /opt/dbmaintenance
+
+chown postgres:postgres copybackups.py
+
+chmod 600 copybackups.py
+
+And set the following (note root crontab) using
+
+crontab -e
+
+5-59/15 * * * * /usr/bin/python3 /opt/dbmaintenance/copybackups.py >/dev/null 2>&1
+
+Which will run the script every 15 minutes with a 5 minute offset, this script copies
+the backup file from /opt/dbmaintenance, sets a timestamp in its name, and stores it
+into /home/bernard/backups ready to be served by a password protected web service.
+
+# create web service
+
+As root, install redis, which is needed by the web service
+
+apt-get install redis
+
+As bernard on the container, create directory www
+
+mkdir ~/www
+
+cp ~/acremscope-db/servebackups.py ~/www
+
+cp -r ~/acremscope-db/servebackups ~/www
+
+and install redis client, skipole and waitress
+
+python3 -m pip install --user skipole
+
+python3 -m pip install --user redis
+
+python3 -m pip install --user waitress
+
+as root, copy the file
+
+cp /home/bernard/www/servebackups.service /lib/systemd/system
+
+Enable the service with
+
+systemctl daemon-reload
+
+systemctl enable servebackups.service
+
+systemctl start servebackups
+
+This starts /home/bernard/www/servebackups.py on boot up.
+
+The site will be visible at.
+
+[https://webparametrics.co.uk/acremscope/backups](https://webparametrics.co.uk/acremscope/backups)
+
 
 
 ## automate clearing guest accounts
