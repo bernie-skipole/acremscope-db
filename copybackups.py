@@ -25,6 +25,8 @@
 #
 # copies /opt/dbmaintenance/backup.sql.gz.cpt to /opt/dbmaintenance/backup_old.sql.gz.cpt
 #
+# ensure the new /opt/dbmaintenance/backup_old.sql.gz.cpt has ownership postgres:postgres
+#
 # generates a datetime filename
 #
 # copies /opt/dbmaintenance/backup.sql.gz.cpt to /home/bernard/backups/datetime.sql.gz.cpt
@@ -53,6 +55,8 @@ if oldfile.is_file():
     oldfile.unlink()
 
 shutil.copy(sourcefile, oldfile)
+
+shutil.chown(oldfile, user="postgres", group="postgres")
 
 destinationfile = destination / datetime.datetime.now().strftime("%Y%m%d%H%M.sql.gz.cpt")
 
