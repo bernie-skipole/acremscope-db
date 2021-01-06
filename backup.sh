@@ -19,7 +19,7 @@ if [ -e $file ];
  then
     if [ -e $oldfile ];
      then
-      rm $oldfile
+      rm -f $oldfile
      fi
     mv $file $oldfile
  fi
