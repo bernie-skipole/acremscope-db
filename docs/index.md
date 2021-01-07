@@ -251,7 +251,7 @@ And add the following to crontab using
 
 crontab -u postgres -e
 
-0 12,13 * * * python3 /opt/dbmaintenance/clearguests.py >/dev/null 2>&1
+0 12,13 * * * /usr/bin/python3 /opt/dbmaintenance/clearguests.py >/dev/null 2>&1
 
 So clearguests.py is run by postgres cron every mid day, and mid day + 1 hour, the script itself checks the time is 12:00 - so that it is only run once at utc 12, this is done as cron uses local time, so this ensures utc is used.
 
