@@ -50,7 +50,7 @@ As root
 
 apt-get install postgresql postgresql-client
 
-psycopg2 is the python client for the postgresql database.
+psycopg2 is the python client for the postgresql database. Obtain this using apt-get rather than pip, so the binaries are installed without any build problems.
 
 apt-get install python3-psycopg2
 
@@ -233,10 +233,27 @@ The site will be visible at.
 [https://webparametrics.co.uk/acremscope/backups](https://webparametrics.co.uk/acremscope/backups)
 
 
+## automate database maintenance
 
-## automate clearing guest accounts
+clearguests.py is a python script using psycopg2 to query the database and delete expired guests at mid day each day.
+
+As root on the container:
+
+copy clearguests.py to /opt/dbmaintenance
+
+cp /home/bernard/acremscope-db/clearguests.py /opt/dbmaintenance
+
+cd /opt/dbmaintenance
+
+chown postgres:postgres clearguests.py
+
+And add the following to crontab using
+
+crontab -u postgres -e
 
 0 12,13 * * * python3 /opt/dbmaintenance/clearguests.py >/dev/null 2>&1
+
+So clearguests.py is run by postgres cron every mid day, and mid day + 1 hour, the script itself checks the time is 12:00 - so that it is only run once at utc 12, this is done as cron uses local time, so this ensures utc is used.
 
 
 
