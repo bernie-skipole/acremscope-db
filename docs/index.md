@@ -255,5 +255,9 @@ crontab -u postgres -e
 
 So clearguests.py is run by postgres cron every mid day, and mid day + 1 hour, the script itself checks the time is 12:00 - so that it is only run once at utc 12, this is done as cron uses local time, so this ensures utc is used.
 
+## password reset
+
+The 'admin' user of the acremscope database is a special user that cannot be deleted from the acremscope remote telescope system, and is intended as the fall back admin user in case other admin users mess the system up. If this admin user gets its password and pin changed and forgotten, the script resetpwd.py can be run to reset it.
+
 
 
