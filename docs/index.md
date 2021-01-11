@@ -196,6 +196,8 @@ As bernard on the container, create directory www
 
 mkdir ~/www
 
+cp ~/acremscope-db/resetpwd.py ~/www
+
 cp ~/acremscope-db/servebackups.py ~/www
 
 cp -r ~/acremscope-db/servebackups ~/www
@@ -257,7 +259,14 @@ So clearguests.py is run by postgres cron every mid day, and mid day + 1 hour, t
 
 ## password reset
 
-The 'admin' user of the acremscope database is a special user that cannot be deleted from the acremscope remote telescope system, and is intended as the fall back admin user in case other admin users mess the system up. If this admin user gets its password and pin changed and forgotten, the script resetpwd.py can be run to reset it.
+The 'admin' user of the acremscope telescope users is a special user that cannot be deleted from the acremscope remote telescope system, and is intended as the fall back admin user in case other admin users mess the system up. If this admin user gets its password and pin changed and forgotten, the script resetpwd.py can be run to reset it.
+
+So as user bernard, in directory ~/www
+
+python3 resetpwd.py
+
+And input a password and prompt when requested. The script will save these to the database, and also output the hashes saved, which can be ignored.
+
 
 
 
