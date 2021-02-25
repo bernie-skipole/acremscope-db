@@ -130,9 +130,11 @@ At the astrodb prompt use the i option to input commands from start_astrodb:
 
 \i /opt/dbmaintenance/start_astrodb
 
-Then use \q to exit the client, and fall out of user postgres (ctrl-D)and try:
+Then use \q to exit the client, and fall out of user postgres (ctrl-D), right back to user bernard, and try:
 
-psql "dbname=astrodb user=astro password=xxSgham host=127.0.0.1"
+psql -h localhost -U astro astrodb
+
+give password xxSgham when prompted
 
 and check you can access the database with:
 
