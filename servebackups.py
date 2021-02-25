@@ -185,12 +185,12 @@ if __name__ == "__main__":
     # which can be used to develop pages for your project
     #
     ############################### THESE LINES ADD SKIADMIN ######################
-    #                                                                             #
-    #set_debug(True)                                                               #
-    #from skipole import skiadmin                                                  #
-    #skiadmin_application = skiadmin.makeapp(editedprojname=PROJECT)               #
-    #application.add_project(skiadmin_application, url='/test/skiadmin')           #
-    #                                                                             #
+    #
+    #from skipole import skiadmin, set_debug
+    #set_debug(True)
+    #skiadmin_application = skiadmin.makeapp(editedprojname=PROJECT)
+    #application.add_project(skiadmin_application, url=PROJ_DATA["projurl"] +'/skiadmin')
+    # 
     ###############################################################################
 
     # if using the waitress server
