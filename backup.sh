@@ -26,7 +26,7 @@ if [ -e $file ];
 
 export keypassphrase
 
-pg_dump "dbname=astrodb user=astro password=xxSgham host=localhost" --clean | gzip | ccrypt -e -E keypassphrase > "$file"
+pg_dump -d astrodb --clean | gzip | ccrypt -e -E keypassphrase > "$file"
 
 
 # To restore a backup file, edit restore.sh to have the filename and key passphrase
