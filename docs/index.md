@@ -122,7 +122,7 @@ createdb -O astro astrodb
 
 Then, still as postgres, enter the posgres client and connect to astrodb:
 
-psql astrodb
+psql -d astrodb
 
 The initial tables and content for astrodb are listed as sql commands in file 'start_astrodb'
 
@@ -194,6 +194,43 @@ Which will run the script every 15 minutes with a 5 minute offset, this script c
 the backup file from /opt/dbmaintenance, sets a timestamp in its name, and stores it
 into /home/bernard/backups ready to be served by a password protected web service.
 
+
+## restore from a database backup file
+
+As user postgres, move to directory /opt/dbmaintenance
+
+Edit the file restore.sh so it points at the required backup file, then run with
+
+source restore.sh
+
+
+If this does not work, it may be necessary to delete the existing database.
+
+psql
+
+drop database astrodb;
+
+\q
+
+Then create a database ‘astrodb’ owned by user astro:
+
+createdb -O astro astrodb
+
+Then, still as postgres, enter the client and connect to astrodb:
+
+psql -d astrodb
+
+At the astrodb prompt use the i option to input commands from start_astrodb:
+
+\i start_astrodb
+
+\q
+
+and again, restore from the backup file
+
+source restore.sh
+
+
 # create web service
 
 As root, install redis, which is needed by the web service
@@ -264,6 +301,7 @@ crontab -u postgres -e
 0 12,13 * * * /usr/bin/python3 /opt/dbmaintenance/clearguests.py >/dev/null 2>&1
 
 So clearguests.py is run by postgres cron every mid day, and mid day + 1 hour, the script itself checks the time is 12:00 - so that it is only run once at utc 12, this is done as cron uses local time, so this ensures utc is used.
+
 
 ## password reset
 
