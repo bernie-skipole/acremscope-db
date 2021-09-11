@@ -26,20 +26,8 @@ if [ -e $file ];
 
 export keypassphrase
 
-pg_dump astrodb | gzip | ccrypt -e -E keypassphrase > "$file"
+pg_dump "dbname=astrodb user=astro password=xxSgham host=localhost" --clean | gzip | ccrypt -e -E keypassphrase > "$file"
 
 
-# To decrypt manually use ccrypt -d from the command line
-# you will be prompted for the keypassphrase,
-# followed by gzip -d
-
-# note ccrypt -d changes the file in place, so if you want to retain the
-# original backup - or if you dont have permission to write,
-# copy the backup file first
-#
-# or use a similar shell file to this, setting the passphrase
-# into environment keypassphrase, followed by:
-
-# cat "$file" | ccrypt -d -E keypassphrase | gzip -d > "/opt/dbmaintenance/backup.sql"
-
+# To restore a backup file, edit restore.sh to have the filename and key passphrase
 
