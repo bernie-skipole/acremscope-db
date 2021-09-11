@@ -152,9 +152,11 @@ As root on the container
 
 apt-get install ccrypt
 
-and put backup.sh and copybackups.py into /opt/dbmaintenance
+and put backup.sh, restore.sh and copybackups.py into /opt/dbmaintenance
 
 cp /home/bernard/acremscope-db/backup.sh /opt/dbmaintenance
+
+cp /home/bernard/acremscope-db/restore.sh /opt/dbmaintenance
 
 cp /home/bernard/acremscope-db/copybackups.py /opt/dbmaintenance
 
@@ -164,7 +166,15 @@ chown postgres:postgres backup.sh
 
 chmod 600 backup.sh
 
-edit the key passphrase in backup.sh to one of your choice
+chown postgres:postgres restore.sh
+
+chmod 600 restore.sh
+
+chown postgres:postgres copybackups.py
+
+chmod 600 copybackups.py
+
+edit the key passphrase in backup.sh and restore.sh to one of your choice
 
 And set the following using
 
@@ -173,10 +183,6 @@ crontab -u postgres -e
 30 13 * * 6 /bin/bash /opt/dbmaintenance/backup.sh >/dev/null 2>&1
 
 This will dump a backup at 1:30 afternoon every saturday into /opt/dbmaintenance
-
-chown postgres:postgres copybackups.py
-
-chmod 600 copybackups.py
 
 And set the following (note root crontab) using
 
