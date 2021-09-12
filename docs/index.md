@@ -150,7 +150,9 @@ As bernard on the container, create directory backups
 
 mkdir ~/backups
 
-As root on the container
+Check the file ~/acremscope-db/sendbackups.sh it should contain the ip address of the acremscope container.
+
+As root:
 
 apt-get install ccrypt
 
@@ -205,8 +207,6 @@ crontab -u bernard -e
 Which will run the script at 3:30 afternoon every saturday, this script copies
 the backups directory to the acremscope container where the backup files can be
 made available to be downloaded.
-
-
 
 
 ## restore from a database backup file
@@ -326,7 +326,5 @@ So as user bernard, in directory ~/www
 python3 resetpwd.py
 
 And input a password and prompt when requested. The script will save these to the database, and also output the hashes saved, which can be ignored.
-
-
 
 
