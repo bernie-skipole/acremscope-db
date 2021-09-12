@@ -39,6 +39,8 @@ ssh-keygen -t rsa -b 4096 -C "bernie@skipole.co.uk"
 
 copy contents of .ssh/id_rsa.pub to github
 
+copy contents of .ssh/id_rsa.pub to the acremscope container in /home/bernard/.ssh/authorized_keys, this allows this container to send backup files to the other container.
+
 clone any required repositories
 
 git clone git@github.com:bernie-skipole/acremscope-db.git
@@ -188,11 +190,23 @@ And set the following (note root crontab) using
 
 crontab -e
 
-5-59/15 * * * * /usr/bin/python3 /opt/dbmaintenance/copybackups.py >/dev/null 2>&1
+30 14 * * 6 /usr/bin/python3 /opt/dbmaintenance/copybackups.py >/dev/null 2>&1
 
-Which will run the script every 15 minutes with a 5 minute offset, this script copies
+Which will run the script at 2:30 afternoon every saturday, this script copies
 the backup file from /opt/dbmaintenance, sets a timestamp in its name, and stores it
-into /home/bernard/backups ready to be served by a password protected web service.
+into /home/bernard/backups.
+
+And set the following (note bernard crontab)
+
+crontab -u bernard -e
+
+30 15 * * 6 /bin/bash /home/bernard/acremscope-db/sendbackups.sh >/dev/null 2>&1
+
+Which will run the script at 3:30 afternoon every saturday, this script copies
+the backups directory to the acremscope container where the backup files can be
+made available to be downloaded.
+
+
 
 
 ## restore from a database backup file

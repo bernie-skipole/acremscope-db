@@ -4,14 +4,9 @@
 # as root run this with crontab
 # crontab -e
 #
-# 5-59/15 * * * * /usr/bin/python3 /opt/dbmaintenance/copybackups.py >/dev/null 2>&1
+# 30 14 * * 6 /usr/bin/python3 /opt/dbmaintenance/copybackups.py >/dev/null 2>&1
 #
-# ie every 15 minutes with a 5 minute offset
-# so 1:20
-#    1:35
-#    1:50
-#    2:05
-#    2:20 etc..
+# ie 2:30 afternoon every saturday
 
 #
 # checks if file /opt/dbmaintenance/backup.sql.gz.cpt exists
