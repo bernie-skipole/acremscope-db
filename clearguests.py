@@ -19,7 +19,7 @@ now = datetime.utcnow()
 if now.hour != 12:
     sys.exit(0)
 
-import psycopg2, redis
+import psycopg2
 
 # the following should match the settings used to create the database
 
@@ -52,19 +52,6 @@ finally:
         con.close()
 
 print(message)
-
-# sends a log to redis, this is available to the database web service which lists backup
-# files. The web service does not currently use it, but may in future
-
-try:
-    rconn = redis.Redis(host='localhost', port=6379, db=0, socket_timeout=5)
-    # create a log entry to set in the redis server
-    fullmessage = now.strftime("%Y-%m-%d %H:%M:%S") + " " + message
-    rconn.rpush("log_info", fullmessage)
-    # and limit number of messages to 50
-    rconn.ltrim("log_info", -50, -1)
-except Exception:
-    print("Unable to store log in redis")
 
 sys.exit(0)
 
