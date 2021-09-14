@@ -272,7 +272,7 @@ So clearguests.py is run by postgres cron every mid day, and mid day + 1 hour, t
 
 The 'admin' user of the acremscope telescope users is a special user that cannot be deleted from the acremscope remote telescope system, and is intended as the fall back admin user in case other admin users mess the system up. If this admin user gets its password and pin changed and forgotten, the script resetpwd.py can be run to reset it.
 
-So as user bernard, in directory ~/www
+So as user bernard, in directory ~/acremscope.py
 
 python3 resetpwd.py
 
