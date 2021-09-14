@@ -245,55 +245,6 @@ and again, restore from the backup file
 source restore.sh
 
 
-# create web service
-
-As root, install redis, which is needed by the web service
-
-apt-get install redis
-
-As bernard on the container, create directory www
-
-mkdir ~/www
-
-cp ~/acremscope-db/resetpwd.py ~/www
-
-cp ~/acremscope-db/servebackups.py ~/www
-
-cp -r ~/acremscope-db/servebackups ~/www
-
-A hashed password needs to be set into servebackups.py, to do so, decide on a username and password and use the script
-
-python3 ~/acremscope-db/hashpassword.py
-
-Which will ask for a username and password and then output a long string of the hashed password. Copy that string and paste it, together with the username into the head of the file ~/www/servebackups.py
-
-and install redis client, skipole and waitress
-
-python3 -m pip install --user skipole
-
-python3 -m pip install --user redis
-
-python3 -m pip install --user waitress
-
-as root, copy the file
-
-cp /home/bernard/www/servebackups.service /lib/systemd/system
-
-Enable the service with
-
-systemctl daemon-reload
-
-systemctl enable servebackups.service
-
-systemctl start servebackups
-
-This starts /home/bernard/www/servebackups.py on boot up.
-
-The site will be visible at.
-
-[https://webparametrics.co.uk/acremscope/backups](https://webparametrics.co.uk/acremscope/backups)
-
-
 ## automate database maintenance
 
 clearguests.py is a python script using psycopg2 to query the database and delete expired guests at mid day each day.
