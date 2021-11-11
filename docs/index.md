@@ -1,5 +1,7 @@
 # Container build documentation
 
+This is no longer used, but project and docs left here for reference
+
 This documents creating a container on webparametrics.co.uk, for the full build of the server, see
 
 [https://bernie-skipole.github.io/webparametrics/](https://bernie-skipole.github.io/webparametrics/)
